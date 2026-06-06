@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 import pandas as pd
-import pandas_ta as ta
 import time
 
 # Streamlit Page Configuration
@@ -98,8 +97,7 @@ st.write("Binance API ব্যবহার করে প্রতি ১৫ ম
 TELEGRAM_BOT_TOKEN = "8957518460:AAE_9HaugsNNYfjOzCpbHi2nJAEKf4GSiKs"
 TELEGRAM_CHAT_ID = "6166836299"
 
-# Binance Pairs List (Mapping from CoinGecko IDs to Binance Symbols)
-# যেসব কয়েন বাইনান্সে USDT পেয়ারে আছে সেগুলো এখানে দেওয়া হলো
+# Binance Pairs List
 binance_symbols = [
     "BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", 
     "ADAUSDT", "DOTUSDT", "AVAXUSDT", "LINKUSDT", "LTCUSDT", 
@@ -154,10 +152,9 @@ def send_telegram_message(token, chat_id, text):
     except Exception as e:
         print(f"Telegram error: {e}")
 
-# Function to fetch data from Binance and calculate 15m 200 EMA
+# Function to fetch data from Binance and calculate 15m 200 EMA using Pandas Built-in EWM
 def get_binance_ema_status(symbol):
     url = "https://api.binance.com/api/v3/klines"
-    # Fetch 300 candlesticks of 15-minute intervals to calculate 200 EMA accurately
     params = {"symbol": symbol, "interval": "15m", "limit": "300"}
     
     try:
@@ -169,11 +166,12 @@ def get_binance_ema_status(symbol):
         if len(data) < 200:
             return "insufficient_data", None, None
             
-        # Extract closing prices
         close_prices = [float(candle[4]) for candle in data]
         
         df = pd.DataFrame(close_prices, columns=["price"])
-        df['ema_200'] = ta.ema(df['price'], length=200)
+        
+        # PANDAS BUILT-IN EXPONENTIAL MOVING AVERAGE (EMA) METHOD
+        df['ema_200'] = df['price'].ewm(span=200, adjust=False).mean()
         
         last_row = df.iloc[-1]
         current_price = last_row['price']
@@ -206,19 +204,15 @@ with col2:
 
 # Auto Refresh & Scan Loop
 while True:
-    # Clear previous screen results before starting a new cycle
     bullish_container.empty()
     bearish_container.empty()
     
     total_coins = len(binance_symbols)
-    
-    # Telegram Broadcast for scan start
     send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "🔄 *১৫ মিনিটের ক্যান্ডেল স্ক্যান শুরু হয়েছে...*")
     
     for i, symbol in enumerate(binance_symbols):
         progress_perc = int(((i + 1) / total_coins) * 100)
         
-        # Display custom animated scanning card
         live_status_box.markdown(f"""
             <div class="scanning-box">
                 <p style="color: #38bdf8; font-size: 1.2rem; margin-bottom: 5px; font-weight: 600;">
@@ -231,13 +225,10 @@ while True:
             </div>
         """, unsafe_allow_html=True)
         
-        # Fetching Status from Binance
         status, price, ema = get_binance_ema_status(symbol)
-        
         coin_url = f"https://www.binance.com/en/trade/{symbol.replace('USDT', '_USDT')}"
         
         if status == "BULLISH":
-            # Display in UI
             bullish_container.markdown(f"""
                 <div class="signal-card bullish">
                     <span>🟢 <a class="coin-link" href="{coin_url}" target="_blank">{symbol}</a></span>
@@ -245,12 +236,10 @@ while True:
                 </div>
             """, unsafe_allow_html=True)
             
-            # Send Telegram Message
             msg = f"🟢 *15m BUY SIGNAL* 🟢\n\n*Coin:* [{symbol}]({coin_url})\n*Status:* Above 200 EMA (15m)\n*Price:* ${price:,.4f}\n*200 EMA:* ${ema:,.4f}"
             send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, msg)
             
         elif status == "BEARISH":
-            # Display in UI
             bearish_container.markdown(f"""
                 <div class="signal-card bearish">
                     <span>🔴 <a class="coin-link" href="{coin_url}" target="_blank">{symbol}</a></span>
@@ -258,14 +247,10 @@ while True:
                 </div>
             """, unsafe_allow_html=True)
             
-            # Send Telegram Message
             msg = f"🔴 *15m SELL SIGNAL* 🔴\n\n*Coin:* [{symbol}]({coin_url})\n*Status:* Below 200 EMA (15m)\n*Price:* ${price:,.4f}\n*200 EMA:* ${ema:,.4f}"
             send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, msg)
             
-        # Binance API allows faster requests (0.1 seconds interval is totally fine)
         time.sleep(0.1)
         
     live_status_box.success("🎉 স্ক্যান শেষ! পরবর্তী স্ক্যান ১৫ মিনিট পর স্বয়ংক্রিয়ভাবে শুরু হবে।")
-    
-    # Wait for 15 minutes (15 minutes = 900 seconds) before starting the next cycle
     time.sleep(900)
