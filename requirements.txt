@@ -1,4 +1,5 @@
 streamlit
 requests
 pandas
-pandas-ta
+scipy
+https://github.com/twopirllc/pandas-ta/archive/refs/heads/development.zip
