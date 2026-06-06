@@ -9,7 +9,7 @@ st.set_page_config(page_title="Crypto 15m 200 EMA Scanner", page_icon="🔍", la
 # Advanced CSS for Luxury Look & Dynamic Glow Animations
 st.markdown("""
     <style>
-    /* Main Theme - ডার্ক লাক্সারি ব্যাকগ্রাউন্ড */
+    /* Main Theme - Dark Luxury Background */
     .stApp {
         background: linear-gradient(135deg, #090d16 0%, #111827 100%);
         color: #f8fafc;
@@ -61,9 +61,9 @@ st.markdown("""
     
     /* Custom Styling for Results */
     .signal-card {
-        padding: 15px;
+        padding: 12px;
         border-radius: 10px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         font-weight: bold;
         display: flex;
         justify-content: space-between;
@@ -91,13 +91,13 @@ st.markdown("""
 
 # App Title
 st.title("🔍 Premium Crypto 15m 200 EMA Live Scanner")
-st.write("Binance API ব্যবহার করে প্রতি ১৫ মিনিট পর পর স্বয়ংক্রিয় লাইভ ২০০ EMA ট্র্যাকার।")
+st.write("Binance API cloud network e direct run hobe. Auto-refresh optimization active.")
 
 # User Credentials
 TELEGRAM_BOT_TOKEN = "8957518460:AAE_9HaugsNNYfjOzCpbHi2nJAEKf4GSiKs"
 TELEGRAM_CHAT_ID = "6166836299"
 
-# Binance Pairs List
+# Binance Pairs List (Filter kora list, jate speed high thake)
 binance_symbols = [
     "BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", 
     "ADAUSDT", "DOTUSDT", "AVAXUSDT", "LINKUSDT", "LTCUSDT", 
@@ -107,40 +107,23 @@ binance_symbols = [
     "FTMUSDT", "ALGOUSDT", "EGLDUSDT", "TIAUSDT", "MINAUSDT", 
     "FLOWUSDT", "ICPUSDT", "EOSUSDT", "KAVAUSDT", "ASTRUSDT", 
     "ONEUSDT", "HBARUSDT", "IOTAUSDT", "NEOUSDT", "QTUMUSDT", 
-    "VETUSDT", "ZILUSDT", "WAVESUSDT", "THETAUSDT", "STRATISUSDT",
-    "ARBUSDT", "OPUSDT", "STRKUSDT", "METISUSDT", "MANTAUSDT", 
-    "SKLUSDT", "CELOUSDT", "LRCUSDT", "IMXUSDT", "OMGUSDT", "ROSEUSDT",
-    "PEPEUSDT", "WIFUSDT", "BONKUSDT", "FLOKIUSDT", "BOMEUSDT", 
-    "MEMEUSDT", "MYROUSDT", "1000SATSUSDT", "TURBOUSDT", "BABYDOGEUSDT", 
-    "PEOPLEUSDT", "WENUSDT", "NOTUSDT", "POPCATUSDT", "CATUSDT", 
-    "BRETTUSDT", "MOGUSDT", "NEIROUSDT", "MOODENGUSDT", "GOATUSDT", 
-    "PNUTUSDT", "ACTUSDT", "SUNDOGUSDT",
-    "FETUSDT", "RNDRUSDT", "GRTUSDT", "TAOUSDT", "AKASHTUSDT", 
-    "AGIXUSDT", "OCEANUSDT", "PHBUSDT", "ARKMUSDT", "WLDUSDT", 
-    "NFPUSDT", "AIUSDT", "LPTUSDT", "FILUSDT", "ARUSDT", 
-    "JASMYUSDT", "STORJUSDT", "BLZUSDT", "ANKRUSDT", "IONETUSDT", 
-    "GLMUSDT", "ORDIUSDT", "MDTUSDT", "CTXCIUSDT", "GTCUSDT", "CLVUSDT",
-    "AAVEUSDT", "PENDLEUSDT", "MKRUSDT", "CRVUSDT", "LDOUSDT", 
-    "JUPUSDT", "RUNEUSDT", "DYDXUSDT", "ENSUSDT", "COMPUSDT", 
-    "SNXUSDT", "SUSHIUSDT", "YFIUSDT", "CAKEUSDT", "BAKEUSDT", 
-    "RAYUSDT", "JOEUSDT", "JTOUSDT", "ORCAUSDT", "COWUSDT", 
-    "1INCHUSDT", "BALUSDT", "BADGERUSDT", "ALPHAUSDT",
-    "ENAUSDT", "DRIFTUSDT", "SAFEUSDT", "PYTHUSDT", "AXLUSDT", 
-    "ONDOUSDT", "TRUUSDT", "ALPACAFUSDT", "BELUSDT", "AUCTIONUSDT", 
-    "TROYUSDT", "QUICKUSDT", "FISUSDT", "UNIFIUSDT", "ETHFIUSDT", 
-    "REZUSDT", "OMNIUSDT", "TNSRUSDT", "SAGAUSDT", "BBUSDT", 
-    "DOCKUSDT", "WRXUSDT", "SCRUSDT", "GALAUSDT", "AXSUSDT", 
-    "SANDUSDT", "MANAUSDT", "PIXELUSDT", "BEAMUSDT", "YGGUSDT", 
-    "ILVUSDT", "ALICEUSDT", "ENJUSDT", "MAGICUSDT", "PORTALUSDT", 
-    "XAIUSDT", "CHZUSDT", "SUPERUSDT", "VOXELUSDT", "DARUSDT", 
-    "TLMUSDT", "BIGTIMEUSDT", "TOKENUSDT", "VANRYUSDT", "MBOXUSDT", 
-    "HIGHUSDT", "WOMWHOLEUSDT", "STGUSDT", "SYNUSDT", "GLMRUSDT", 
-    "MOVRUSDT", "KSMUSDT", "ICXUSDT", "BANDUSDT", "TRBUSDT", 
-    "DIAUSDT", "ZECUSDT", "XMRUSDT", "DASHUSDT", "ZENUSDT", 
-    "ONTUSDT", "IOTXUSDT", "RVNUSDT", "HOTUSDT", "BATUSDT", 
-    "KNCUSDT", "ZRXUSDT", "RENUSDT", "WOOUSDT", "GMTUSDT", 
-    "IDUSDT", "EDUUSDT", "HOOKUSDT", "CYBERUSDT", "MAVUSDT", 
-    "ARKUSDT", "POLYUSDT", "LOOMUSDT", "BONDUSDT", "VGXUSDT", "RADUSDT"
+    "VETUSDT", "ZILUSDT", "WAVESUSDT", "THETAUSDT", "ARBUSDT", 
+    "OPUSDT", "STRKUSDT", "METISUSDT", "MANTAUSDT", "SKLUSDT", 
+    "CELOUSDT", "LRCUSDT", "IMXUSDT", "ROSEUSDT", "PEPEUSDT", 
+    "WIFUSDT", "BONKUSDT", "FLOKIUSDT", "BOMEUSDT", "MEMEUSDT", 
+    "MYROUSDT", "1000SATSUSDT", "TURBOUSDT", "PEOPLEUSDT", "NOTUSDT", 
+    "POPCATUSDT", "BRETTUSDT", "MOGUSDT", "NEIROUSDT", "MOODENGUSDT", 
+    "GOATUSDT", "PNUTUSDT", "ACTUSDT", "FETUSDT", "GRTUSDT", 
+    "TAOUSDT", "ARKMUSDT", "WLDUSDT", "LPTUSDT", "FILUSDT", 
+    "ARUSDT", "JASMYUSDT", "STORJUSDT", "BLZUSDT", "ANKRUSDT", 
+    "ORDIUSDT", "AAVEUSDT", "PENDLEUSDT", "MKRUSDT", "CRVUSDT", 
+    "LDOUSDT", "JUPUSDT", "RUNEUSDT", "DYDXUSDT", "ENSUSDT", 
+    "SNXUSDT", "SUSHIUSDT", "YFIUSDT", "CAKEUSDT", "RAYUSDT", 
+    "JTOUSDT", "1INCHUSDT", "ENAUSDT", "PYTHUSDT", "ONDOUSDT", 
+    "GALAUSDT", "AXSUSDT", "SANDUSDT", "MANAUSDT", "PIXELUSDT", 
+    "YGGUSDT", "CHZUSDT", "SUPERUSDT", "BIGTIMEUSDT", "TOKENUSDT", 
+    "VANRYUSDT", "ZECUSDT", "XMRUSDT", "DASHUSDT", "ZENUSDT", 
+    "IOTXUSDT", "HOTUSDT", "BATUSDT", "WOOUSDT", "GMTUSDT", "IDUSDT"
 ]
 
 # Function to send Telegram Message
@@ -149,78 +132,88 @@ def send_telegram_message(token, chat_id, text):
     payload = {"chat_id": chat_id, "text": text, "parse_mode": "Markdown"}
     try:
         requests.post(url, json=payload)
-    except Exception as e:
-        print(f"Telegram error: {e}")
+    except:
+        pass
 
-# Function to fetch data from Binance and calculate 15m 200 EMA using Pandas Built-in EWM
+# Function to fetch data from Binance and calculate 15m 200 EMA
 def get_binance_ema_status(symbol):
     url = "https://api.binance.com/api/v3/klines"
     params = {"symbol": symbol, "interval": "15m", "limit": "300"}
-    
     try:
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=5)
         if response.status_code != 200:
-            return "error", None, None
-            
+            return None, None, None
         data = response.json()
         if len(data) < 200:
-            return "insufficient_data", None, None
+            return None, None, None
             
         close_prices = [float(candle[4]) for candle in data]
-        
         df = pd.DataFrame(close_prices, columns=["price"])
-        
-        # PANDAS BUILT-IN EXPONENTIAL MOVING AVERAGE (EMA) METHOD
         df['ema_200'] = df['price'].ewm(span=200, adjust=False).mean()
         
         last_row = df.iloc[-1]
-        current_price = last_row['price']
-        ema_200 = last_row['ema_200']
-        
-        if pd.isna(ema_200):
-            return "insufficient_data", None, None
-            
-        status = "BULLISH" if current_price > ema_200 else "BEARISH"
-        return status, current_price, ema_200
-        
-    except Exception:
-        return "error", None, None
+        return "BULLISH" if last_row['price'] > last_row['ema_200'] else "BEARISH", last_row['price'], last_row['ema_200']
+    except:
+        return None, None, None
 
-# Main Execution Flow
-st.sidebar.header("⚙️ কন্ট্রোল প্যানেল")
-st.sidebar.info("এই অ্যাপ্লিকেশনটি চালূ রাখলে প্রতি ১৫ মিনিট পর পর অটোমেটিক লাইভ স্ক্যান হবে এবং রেজাল্ট আপডেট করবে।")
+# Initialize Session States for permanent UI display
+if 'bullish_list' not in st.session_state:
+    st.session_state.bullish_list = []
+if 'bearish_list' not in st.session_state:
+    st.session_state.bearish_list = []
 
-# Containers for results
+# Sidebar Controls
+st.sidebar.header("⚙️ Control Panel")
+scan_now = st.sidebar.button("🚀 Start Scan")
+
+# Automatic 15-minute refresh using Streamlit configuration
+if st.sidebar.checkbox("🔄 Enable Auto 15m Loop", value=False):
+    st.sidebar.caption("Auto-refresh active. Dashboard will refresh every 15 mins.")
+    time_delay = 900
+else:
+    time_delay = None
+
+# UI Containers setup
 live_status_box = st.empty()
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("🟢 15m 200 EMA এর উপরে (Buy Signal)")
-    bullish_container = st.container()
+    st.subheader("🟢 15m 200 EMA Up (Buy Signal)")
+    bullish_ui = st.container()
 
 with col2:
-    st.subheader("🔴 15m 200 EMA এর নিচে (Sell Signal)")
-    bearish_container = st.container()
+    st.subheader("🔴 15m 200 EMA Down (Sell Signal)")
+    bearish_ui = st.container()
 
-# Auto Refresh & Scan Loop
-while True:
-    bullish_container.empty()
-    bearish_container.empty()
+# Render previous session results instantly so screen is never empty
+for coin in st.session_state.bullish_list:
+    bullish_ui.markdown(coin, unsafe_allow_html=True)
+for coin in st.session_state.bearish_list:
+    bearish_ui.markdown(coin, unsafe_allow_html=True)
+
+# Main Trigger Loop
+if scan_now or time_delay:
+    # Clear active lists for fresh calculation
+    st.session_state.bullish_list = []
+    st.session_state.bearish_list = []
+    bullish_ui.empty()
+    bearish_ui.empty()
     
     total_coins = len(binance_symbols)
-    send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "🔄 *১৫ মিনিটের ক্যান্ডেল স্ক্যান শুরু হয়েছে...*")
+    send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "🔄 *15m 200 EMA Live Scan Started!*")
     
     for i, symbol in enumerate(binance_symbols):
         progress_perc = int(((i + 1) / total_coins) * 100)
         
+        # Pop-up animation logic
         live_status_box.markdown(f"""
             <div class="scanning-box">
                 <p style="color: #38bdf8; font-size: 1.2rem; margin-bottom: 5px; font-weight: 600;">
-                    🔍 লাইভ স্ক্যানিং প্রোগ্রেস (15m Timeframe): {progress_perc}% ({i+1}/{total_coins})
+                    🔍 LIVE SCANNING: {progress_perc}% ({i+1}/{total_coins})
                 </p>
                 <div class="scanning-coin">{symbol}</div>
                 <p style="color: #64748b; font-size: 0.9rem; margin-top: 5px;">
-                    বাইনান্স হাই-স্পিড ডাটাবেজ প্রসেসিং চলছে...
+                    Binance Data Processing Network Live...
                 </p>
             </div>
         """, unsafe_allow_html=True)
@@ -229,28 +222,37 @@ while True:
         coin_url = f"https://www.binance.com/en/trade/{symbol.replace('USDT', '_USDT')}"
         
         if status == "BULLISH":
-            bullish_container.markdown(f"""
+            card_html = f"""
                 <div class="signal-card bullish">
                     <span>🟢 <a class="coin-link" href="{coin_url}" target="_blank">{symbol}</a></span>
                     <span>Price: ${price:,.4f} | EMA: ${ema:,.4f}</span>
                 </div>
-            """, unsafe_allow_html=True)
+            """
+            st.session_state.bullish_list.append(card_html)
+            bullish_ui.markdown(card_html, unsafe_allow_html=True)
             
-            msg = f"🟢 *15m BUY SIGNAL* 🟢\n\n*Coin:* [{symbol}]({coin_url})\n*Status:* Above 200 EMA (15m)\n*Price:* ${price:,.4f}\n*200 EMA:* ${ema:,.4f}"
+            # Instant Telegram Alert
+            msg = f"🟢 *15m BUY SIGNAL* 🟢\n\n*Coin:* [{symbol}]({coin_url})\n*Price:* ${price:,.4f}\n*200 EMA:* ${ema:,.4f}"
             send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, msg)
             
         elif status == "BEARISH":
-            bearish_container.markdown(f"""
+            card_html = f"""
                 <div class="signal-card bearish">
                     <span>🔴 <a class="coin-link" href="{coin_url}" target="_blank">{symbol}</a></span>
                     <span>Price: ${price:,.4f} | EMA: ${ema:,.4f}</span>
                 </div>
-            """, unsafe_allow_html=True)
+            """
+            st.session_state.bearish_list.append(card_html)
+            bearish_ui.markdown(card_html, unsafe_allow_html=True)
             
-            msg = f"🔴 *15m SELL SIGNAL* 🔴\n\n*Coin:* [{symbol}]({coin_url})\n*Status:* Below 200 EMA (15m)\n*Price:* ${price:,.4f}\n*200 EMA:* ${ema:,.4f}"
+            # Instant Telegram Alert
+            msg = f"🔴 *15m SELL SIGNAL* 🔴\n\n*Coin:* [{symbol}]({coin_url})\n*Price:* ${price:,.4f}\n*200 EMA:* ${ema:,.4f}"
             send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, msg)
             
-        time.sleep(0.1)
+        time.sleep(0.05) # Superfast response handling
         
-    live_status_box.success("🎉 স্ক্যান শেষ! পরবর্তী স্ক্যান ১৫ মিনিট পর স্বয়ংক্রিয়ভাবে শুরু হবে।")
-    time.sleep(900)
+    live_status_box.success("🎉 Scan Completed Successfully!")
+    
+    if time_delay:
+        time.sleep(time_delay)
+        st.rerun()
