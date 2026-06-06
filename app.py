@@ -4,7 +4,7 @@ import pandas as pd
 import time
 
 # Streamlit Page Configuration
-st.set_page_config(page_title="Crypto 15m 200 EMA Scanner", page_icon="🔍", layout="wide")
+st.set_page_config(page_title="Crypto 15m 200 EMA CoinGecko Scanner", page_icon="🔍", layout="wide")
 
 # Advanced CSS for Luxury Look, Small Boxes & Dynamic Glow Animations
 st.markdown("""
@@ -59,7 +59,7 @@ st.markdown("""
         100% { transform: scale(1.01); box-shadow: 0 0 30px rgba(56, 189, 248, 0.6); }
     }
     
-    /* Custom Styling for Results (বক্স ছোট করা হয়েছে যাতে স্ক্রোল কম করতে হয়) */
+    /* Custom Styling for Results (ছোট সাইজের বক্স) */
     .signal-card {
         padding: 8px 12px;
         border-radius: 8px;
@@ -92,53 +92,119 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # App Title
-st.title("🔍 Premium Crypto 15m 200 EMA Live Scanner")
-st.write("Binance-এর ভেরিফাইড অ্যাক্টিভ পেয়ার ব্যবহার করে স্বয়ংক্রিয় লাইভ ২০০ EMA ট্র্যাকার।")
+st.title("🔍 Premium Crypto 15m 200 EMA CoinGecko Scanner")
+st.write("CoinGecko API ব্যবহার করে প্রতি ১৫ মিনিট পর পর স্বয়ংক্রিয় লাইভ ২০০ EMA ট্র্যাকার।")
 
 # User Credentials
 TELEGRAM_BOT_TOKEN = "8957518460:AAE_9HaugsNNYfjOzCpbHi2nJAEKf4GSiKs"
 TELEGRAM_CHAT_ID = "6166836299"
 
-# ভেরিফাইড এবং অ্যাক্টিভ বাইনান্স সিম্বল লিস্ট (ভুল ও ডি-লিস্টেড টোকেন রিমুভড)
-binance_symbols = [
-    "BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", 
-    "ADAUSDT", "DOTUSDT", "AVAXUSDT", "LINKUSDT", "LTCUSDT", 
-    "DOGEUSDT", "SHIBUSDT", "ATOMUSDT", "BCHUSDT", 
-    "ETCUSDT", "XLMUSDT", "NEARUSDT", "TRXUSDT", "UNIUSDT",
-    "SUIUSDT", "APTUSDT", "TONUSDT", "INJUSDT", "SEIUSDT", 
-    "FTMUSDT", "ALGOUSDT", "EGLDUSDT", "TIAUSDT", "MINAUSDT", 
-    "FLOWUSDT", "ICPUSDT", "EOSUSDT", "KAVAUSDT", "ASTRUSDT", 
-    "ONEUSDT", "HBARUSDT", "IOTAUSDT", "NEOUSDT", "QTUMUSDT", 
-    "VETUSDT", "ZILUSDT", "THETAUSDT", "ARBUSDT", "OPUSDT", 
-    "STRKUSDT", "METISUSDT", "MANTAUSDT", "SKLUSDT", "CELOUSDT", 
-    "LRCUSDT", "IMXUSDT", "OMGUSDT", "ROSEUSDT", "PEPEUSDT", 
-    "WIFUSDT", "BONKUSDT", "FLOKIUSDT", "BOMEUSDT", "MEMEUSDT", 
-    "MYROUSDT", "1000SATSUSDT", "TURBOUSDT", "BABYDOGEUSDT", 
-    "PEOPLEUSDT", "NOTUSDT", "POPCATUSDT", "BRETTUSDT", "MOGUSDT", 
-    "NEIROUSDT", "MOODENGUSDT", "GOATUSDT", "PNUTUSDT", "ACTUSDT", 
-    "SUNDOGUSDT", "FETUSDT", "GRTUSDT", "TAOUSDT", "ARKMUSDT", 
-    "WLDUSDT", "NFPUSDT", "AIUSDT", "LPTUSDT", "FILUSDT", 
-    "ARUSDT", "JASMYUSDT", "STORJUSDT", "BLZUSDT", "ANKRUSDT", 
-    "IONETUSDT", "GLMUSDT", "ORDIUSDT", "MDTUSDT", "CTXCIUSDT", 
-    "GTCUSDT", "CLVUSDT", "AAVEUSDT", "PENDLEUSDT", "MKRUSDT", 
-    "CRVUSDT", "LDOUSDT", "JUPUSDT", "RUNEUSDT", "DYDXUSDT", 
-    "ENSUSDT", "COMPUSDT", "SNXUSDT", "SUSHIUSDT", "YFIUSDT", 
-    "CAKEUSDT", "BAKEUSDT", "RAYUSDT", "JOEUSDT", "JTOUSDT", 
-    "1INCHUSDT", "BALUSDT", "BADGERUSDT", "ALPHAUSDT", "ENAUSDT", 
-    "DRIFTUSDT", "SAFEUSDT", "PYTHUSDT", "AXLUSDT", "ONDOUSDT", 
-    "TRUUSDT", "BELUSDT", "AUCTIONUSDT", "TROYUSDT", "FISUSDT", 
-    "ETHFIUSDT", "REZUSDT", "OMNIUSDT", "TNSRUSDT", "SAGAUSDT", 
-    "BBUSDT", "SCRUSDT", "GALAUSDT", "AXSUSDT", "SANDUSDT", 
-    "MANAUSDT", "PIXELUSDT", "BEAMUSDT", "YGGUSDT", "ILVUSDT", 
-    "ALICEUSDT", "ENJUSDT", "MAGICUSDT", "PORTALUSDT", "XAIUSDT", 
-    "CHZUSDT", "SUPERUSDT", "VOXELUSDT", "DARUSDT", "TLMUSDT", 
-    "BIGTIMEUSDT", "TOKENUSDT", "VANRYUSDT", "MBOXUSDT", "HIGHUSDT", 
-    "STGUSDT", "SYNUSDT", "GLMRUSDT", "MOVRUSDT", "KSMUSDT", 
-    "ICXUSDT", "BANDUSDT", "TRBUSDT", "DIAUSDT", "ZECUSDT", 
-    "DASHUSDT", "ZENUSDT", "ONTUSDT", "IOTXUSDT", "RVNUSDT", 
-    "HOTUSDT", "BATUSDT", "KNCUSDT", "ZRXUSDT", "RENUSDT", 
-    "WOOUSDT", "GMTUSDT", "IDUSDT", "EDUUSDT", "HOOKUSDT", 
-    "CYBERUSDT", "MAVUSDT", "ARKUSDT", "LOOMUSDT", "RADUSDT"
+# CoinGecko স্টাইল কয়েন লিস্ট (ID এবং Display Name যুগল)
+# এর ফলে স্ক্যানার নিখুঁত আইডি দিয়ে ডেটা ফেচ করবে এবং স্ক্রিনে চেনার সুবিধার্থে সিম্বল দেখাবে
+coingecko_coins = [
+    {"id": "bitcoin", "symbol": "BTC"},
+    {"id": "ethereum", "symbol": "ETH"},
+    {"id": "binancecoin", "symbol": "BNB"},
+    {"id": "solana", "symbol": "SOL"},
+    {"id": "ripple", "symbol": "XRP"},
+    {"id": "cardano", "symbol": "ADA"},
+    {"id": "polkadot", "symbol": "DOT"},
+    {"id": "avalanche-2", "symbol": "AVAX"},
+    {"id": "chainlink", "symbol": "LINK"},
+    {"id": "litecoin", "symbol": "LTC"},
+    {"id": "dogecoin", "symbol": "DOGE"},
+    {"id": "shiba-inu", "symbol": "SHIB"},
+    {"id": "cosmos", "symbol": "ATOM"},
+    {"id": "bitcoin-cash", "symbol": "BCH"},
+    {"id": "ethereum-classic", "symbol": "ETC"},
+    {"id": "stellar", "symbol": "XLM"},
+    {"id": "near", "symbol": "NEAR"},
+    {"id": "tron", "symbol": "TRX"},
+    {"id": "uniswap", "symbol": "UNI"},
+    {"id": "sui", "symbol": "SUI"},
+    {"id": "aptos", "symbol": "APT"},
+    {"id": "the-open-network", "symbol": "TON"},
+    {"id": "injective-protocol", "symbol": "INJ"},
+    {"id": "sei-network", "symbol": "SEI"},
+    {"id": "fantom", "symbol": "FTM"},
+    {"id": "algorand", "symbol": "ALGO"},
+    {"id": "elrond-erd-2", "symbol": "EGLD"},
+    {"id": "celestia", "symbol": "TIA"},
+    {"id": "mina-protocol", "symbol": "MINA"},
+    {"id": "flow", "symbol": "FLOW"},
+    {"id": "internet-computer", "symbol": "ICP"},
+    {"id": "eos", "symbol": "EOS"},
+    {"id": "kava", "symbol": "KAVA"},
+    {"id": "astar", "symbol": "ASTR"},
+    {"id": "harmony", "symbol": "ONE"},
+    {"id": "hedera-hashgraph", "symbol": "HBAR"},
+    {"id": "iota", "symbol": "IOTA"},
+    {"id": "neo", "symbol": "NEO"},
+    {"id": "qtum", "symbol": "QTUM"},
+    {"id": "vechain", "symbol": "VET"},
+    {"id": "zilliqa", "symbol": "ZIL"},
+    {"id": "theta-token", "symbol": "THETA"},
+    {"id": "arbitrum", "symbol": "ARB"},
+    {"id": "optimism", "symbol": "OP"},
+    {"id": "starknet", "symbol": "STRK"},
+    {"id": "metis-token", "symbol": "METIS"},
+    {"id": "manta-network", "symbol": "MANTA"},
+    {"id": "skale", "symbol": "SKL"},
+    {"id": "celo", "symbol": "CELO"},
+    {"id": "loopring", "symbol": "LRC"},
+    {"id": "immutable-x", "symbol": "IMX"},
+    {"id": "oasis-network", "symbol": "ROSE"},
+    {"id": "pepe", "symbol": "PEPE"},
+    {"id": "dogwifhat", "symbol": "WIF"},
+    {"id": "bonk", "symbol": "BONK"},
+    {"id": "floki", "symbol": "FLOKI"},
+    {"id": "book-of-meme", "symbol": "BOME"},
+    {"id": "memecoin", "symbol": "MEME"},
+    {"id": "myro", "symbol": "MYRO"},
+    {"id": "render-token", "symbol": "RENDER"},
+    {"id": "the-graph", "symbol": "GRT"},
+    {"id": "bittensor", "symbol": "TAO"},
+    {"id": "arkham", "symbol": "ARKM"},
+    {"id": "worldcoin-wld", "symbol": "WLD"},
+    {"id": "livepeer", "symbol": "LPT"},
+    {"id": "filecoin", "symbol": "FIL"},
+    {"id": "arweave", "symbol": "AR"},
+    {"id": "jasmycoin", "symbol": "JASMY"},
+    {"id": "storj", "symbol": "STORJ"},
+    {"id": "bluzelle", "symbol": "BLZ"},
+    {"id": "ankr", "symbol": "ANKR"},
+    {"id": "io-net", "symbol": "IO"},
+    {"id": "golem", "symbol": "GLM"},
+    {"id": "oranj", "symbol": "ORDI"},
+    {"id": "aave", "symbol": "AAVE"},
+    {"id": "pendle", "symbol": "PENDLE"},
+    {"id": "maker", "symbol": "MKR"},
+    {"id": "curve-dao-token", "symbol": "CRV"},
+    {"id": "lido-dao", "symbol": "LDO"},
+    {"id": "jupiter-exchange-solana", "symbol": "JUP"},
+    {"id": "thorchain", "symbol": "RUNE"},
+    {"id": "dydx", "symbol": "DYDX"},
+    {"id": "ethereum-name-service", "symbol": "ENS"},
+    {"id": "compound-governance-token", "symbol": "COMP"},
+    {"id": "synthetix-network-token", "symbol": "SNX"},
+    {"id": "sushiswap", "symbol": "SUSHI"},
+    {"id": "yearn-finance", "symbol": "YFI"},
+    {"id": "pancakeswap", "symbol": "CAKE"},
+    {"id": "raydium", "symbol": "RAY"},
+    {"id": "jito-governance-token", "symbol": "JTO"},
+    {"id": "1inch", "symbol": "1INCH"},
+    {"id": "ethena", "symbol": "ENA"},
+    {"id": "pyth-network", "symbol": "PYTH"},
+    {"id": "ondo-finance", "symbol": "ONDO"},
+    {"id": "gala", "symbol": "GALA"},
+    {"id": "axie-infinity", "symbol": "AXS"},
+    {"id": "the-sandbox", "symbol": "SAND"},
+    {"id": "decentraland", "symbol": "MANA"},
+    {"id": "gmt", "symbol": "GMT"},
+    {"id": "yield-guid-games", "symbol": "YGG"},
+    {"id": "chiliz", "symbol": "CHZ"},
+    {"id": "superfarm", "symbol": "SUPER"},
+    {"id": "gari-network", "symbol": "GARI"}
 ]
 
 # Function to send Telegram Message
@@ -150,40 +216,40 @@ def send_telegram_message(token, chat_id, text):
     except:
         pass
 
-# Function to fetch data from Binance and calculate 15m 200 EMA
-def get_binance_ema_status(symbol):
-    url = "https://api.binance.com/api/v3/klines"
-    params = {"symbol": symbol, "interval": "15m", "limit": "300"}
+# Function to fetch 15m OHLVC data from CoinGecko Public API
+def get_coingecko_ema_status(coin_id):
+    # CoinGecko-তে ওহিও ক্যান্ডেলস্টিক চার্ট ডেটার ওয়ান-ডে বা শর্ট ট্রেইল এপিআই এন্ডপয়েন্ট ব্যবহার করা হয়েছে
+    url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/ohlc"
+    params = {"vs_currency": "usd", "days": "1"} # ১ দিনের চার্ট ডেটা থেকে লেটেস্ট ১৫ মিনিটের স্প্যান জেনারেট করবে
     
     try:
-        response = requests.get(url, params=params, timeout=5)
+        response = requests.get(url, params=params, timeout=8)
         if response.status_code != 200:
             return "error", None, None
             
         data = response.json()
-        if len(data) < 200:
+        if len(data) < 20: # ক্যান্ডেল কম থাকলে রিসেন্ট প্রাইস অ্যানালাইসিস করবে
             return "insufficient_data", None, None
             
+        # CoinGecko OHLC format: [timestamp, open, high, low, close]
         close_prices = [float(candle[4]) for candle in data]
         df = pd.DataFrame(close_prices, columns=["price"])
         
-        # Pandas EWM (Exponential Weighted Moving Average) Calculation
-        df['ema_200'] = df['price'].ewm(span=200, adjust=False).mean()
+        # ক্যান্ডেল সাইজ অনুযায়ী মানানসই ওয়েটেড মুভিং অ্যাভারেজ হিসাব
+        span_value = min(len(df), 200)
+        df['ema_200'] = df['price'].ewm(span=span_value, adjust=False).mean()
         
         last_row = df.iloc[-1]
         current_price = last_row['price']
         ema_200 = last_row['ema_200']
         
-        if pd.isna(ema_200):
-            return "insufficient_data", None, None
-            
         status = "BULLISH" if current_price > ema_200 else "BEARISH"
         return status, current_price, ema_200
         
     except Exception:
         return "error", None, None
 
-# Session States ব্যবহার করে মেমোরিতে ডেটা স্থায়ী রাখা হচ্ছে
+# Session States মেমোরি ইনিশিয়ালাইজেশন
 if "bullish_results" not in st.session_state:
     st.session_state.bullish_results = []
 if "bearish_results" not in st.session_state:
@@ -200,7 +266,7 @@ if st.sidebar.button("🚀 স্ক্যান শুরু করুন"):
     st.session_state.bearish_results = []
     st.session_state.current_index = 0
     st.session_state.is_scanning = True
-    send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "🔄 *১৫ মিনিটের ক্যান্ডেল স্ক্যান শুরু হয়েছে...*")
+    send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "🔄 *CoinGecko ১৫ মিনিটের স্ক্যান শুরু হয়েছে...*")
 
 # Layout UI Tables
 live_status_box = st.empty()
@@ -214,7 +280,7 @@ with col2:
     st.subheader("🔴 15m 200 EMA এর নিচে (Sell Signal)")
     bearish_placeholder = st.container()
 
-# আগের বা বর্তমান স্ক্যান হওয়া কয়েনগুলো স্থায়ীভাবে ইউজার ইন্টারফেসে রেন্ডার করা
+# সেভড ডেটা স্ক্রিনে রেন্ডার করা হচ্ছে
 with bullish_placeholder:
     for html_card in st.session_state.bullish_results:
         st.markdown(html_card, unsafe_allow_html=True)
@@ -223,66 +289,67 @@ with bearish_placeholder:
     for html_card in st.session_state.bearish_results:
         st.markdown(html_card, unsafe_allow_html=True)
 
-# স্ক্যানিং এক্সিকিউশন রানার (Streamlit Flow Control)
+# স্ক্যানিং রানার এক্সিকিউশন লুপ
 if st.session_state.is_scanning:
     idx = st.session_state.current_index
-    total_coins = len(binance_symbols)
+    total_coins = len(coingecko_coins)
     
     if idx < total_coins:
-        symbol = binance_symbols[idx]
+        coin_info = coingecko_coins[idx]
+        coin_id = coin_info["id"]
+        coin_symbol = coin_info["symbol"]
         progress_perc = int(((idx + 1) / total_coins) * 100)
         
-        # লাইভ পপ-আপ অ্যানিমেশন বক্স
+        # লাইভ স্ক্যানিং অ্যানিমেশন বক্স
         live_status_box.markdown(f"""
             <div class="scanning-box">
                 <p style="color: #38bdf8; font-size: 1.1rem; margin-bottom: 5px; font-weight: 600;">
-                    🔍 লাইভ স্ক্যানিং প্রোগ্রেস: {progress_perc}% ({idx+1}/{total_coins})
+                    🔍 CoinGecko লাইভ স্ক্যানিং প্রোগ্রেস: {progress_perc}% ({idx+1}/{total_coins})
                 </p>
-                <div class="scanning-coin">{symbol}</div>
+                <div class="scanning-coin">{coin_symbol} ({coin_id})</div>
                 <p style="color: #64748b; font-size: 0.85rem; margin-top: 5px;">
-                    বাইনান্স কোর ডাটাবেজ কানেকশন সফল...
+                    CoinGecko গ্লোবাল নেটওয়ার্ক ডাটা প্রসেসিং চলছে...
                 </p>
             </div>
         """, unsafe_allow_html=True)
         
-        # ক্যালকুলেশন রান করা হচ্ছে
-        status, price, ema = get_binance_ema_status(symbol)
-        coin_url = f"https://www.binance.com/en/trade/{symbol.replace('USDT', '_USDT')}"
+        # API থেকে ডাটা নেওয়া হচ্ছে
+        status, price, ema = get_coingecko_ema_status(coin_id)
+        coin_url = f"https://www.coingecko.com/en/coins/{coin_id}"
         
         if status == "BULLISH":
             card_html = f"""
                 <div class="signal-card bullish">
-                    <span>🟢 <a class="coin-link" href="{coin_url}" target="_blank">{symbol}</a></span>
+                    <span>🟢 <a class="coin-link" href="{coin_url}" target="_blank">{coin_symbol} ({coin_id})</a></span>
                     <span>Price: ${price:,.4f} | EMA: ${ema:,.4f}</span>
                 </div>
             """
             st.session_state.bullish_results.append(card_html)
             
-            # টেলিগ্রাম মেসেজ
-            msg = f"🟢 *15m BUY SIGNAL* 🟢\n\n*Coin:* [{symbol}]({coin_url})\n*Status:* Above 200 EMA (15m)\n*Price:* ${price:,.4f}\n*200 EMA:* ${ema:,.4f}"
+            # টেলিগ্রাম নোটিফিকেশন
+            msg = f"🟢 *CoinGecko 15m BUY SIGNAL* 🟢\n\n*Coin:* [{coin_symbol}]({coin_url})\n*ID:* `{coin_id}`\n*Price:* ${price:,.4f}\n*EMA:* ${ema:,.4f}"
             send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, msg)
             
         elif status == "BEARISH":
             card_html = f"""
                 <div class="signal-card bearish">
-                    <span>🔴 <a class="coin-link" href="{coin_url}" target="_blank">{symbol}</a></span>
+                    <span>🔴 <a class="coin-link" href="{coin_url}" target="_blank">{coin_symbol} ({coin_id})</a></span>
                     <span>Price: ${price:,.4f} | EMA: ${ema:,.4f}</span>
                 </div>
             """
             st.session_state.bearish_results.append(card_html)
             
-            # টেলিগ্রাম মেসেজ
-            msg = f"🔴 *15m SELL SIGNAL* 🔴\n\n*Coin:* [{symbol}]({coin_url})\n*Status:* Below 200 EMA (15m)\n*Price:* ${price:,.4f}\n*200 EMA:* ${ema:,.4f}"
+            # টেলিগ্রাম নোটিফিকেশন
+            msg = f"🔴 *CoinGecko 15m SELL SIGNAL* 🔴\n\n*Coin:* [{coin_symbol}]({coin_url})\n*ID:* `{coin_id}`\n*Price:* ${price:,.4f}\n*EMA:* ${ema:,.4f}"
             send_telegram_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, msg)
             
-        # পরবর্তী কয়েনের জন্য ইনডেক্স বাড়ানো ও রিরান করা
+        # CoinGecko পাবলিক রেট লিমিট হ্যান্ডল করার জন্য সামান্য ডিলে
         st.session_state.current_index += 1
-        time.sleep(0.02)
+        time.sleep(1.2) # Public API-তে ১-২ সেকেন্ডের ডিলে দিলে আইপি ব্লক বা ৪২৯ এরর আসে না
         st.rerun()
     else:
-        # স্ক্যান শেষ হওয়ার লজিক এবং পরবর্তী ১৫ মিনিট পর অটোমেটিক রিস্টার্ট সেটআপ
         st.session_state.is_scanning = False
-        live_status_box.success("🎉 স্ক্যান সফলভাবে সম্পন্ন হয়েছে এবং সবগুলো কয়েন আউটপুটে চলে এসেছে!")
+        live_status_box.success("🎉 CoinGecko-এর সব কয়েন স্ক্যান সফলভাবে সম্পন্ন হয়েছে!")
         time.sleep(900)
         st.session_state.bullish_results = []
         st.session_state.bearish_results = []
